@@ -1,0 +1,32 @@
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js">
+    </script>
+    <script>
+        $(document).ready(function(){
+            $.ajaxSetup({cache: true});
+            $.getScript('https://connect.facebook.net/en_US/sdk.js', function(){
+                FB.init({
+                    appId: '569446653394144',
+                    version: 'v2.9'
+               });
+               
+                FB.api(
+                   '413851772100305_928782080607269?access_token=EAACEdEose0cBANMMZCjhttZCz7zfeCHLfPlGMgBmcvNOyda6YcNOJ2tWVeyQ9ZAlK7WWdP893JPhPmteQZAIm8vKycDDiOZBPORrBIG91ZBVrJpZC6oeYUpEkz98RawYteGEXZBK1MniUJUCH61ZA9QzuNNr4NRkCbpkH6cCTRNJ7ap5OdouzLO1uZCu3E2mUqmxkUZCZAgs3hsq4wZDZD&fields=comments',                   
+                   'GET',
+                   {},
+                   function(response){
+                    for(i=0;i<response.comments.data.length;i++){
+                        document.getElementById('prova').innerHTML += ('<p>' + response.comments.data[i].message + '</p>');
+                        console.log(response.comments.data[i].message);
+                    }
+                       //console.log(response.comments.data);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="prova"></div>
+</body>
+</html>
