@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Facebook Comments Grabber</title>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>        
+    </head>
+    <body>
+        <form action=''>
+            <input type='text' id="link" value="https://www.facebook.com/FacebookItalia/posts/1510512665680770" placeholder="Link here..." size="50"></br>
+            <input type='text' id="token" value="" placeholder="Token here..." size="50"></br>
+            <button type="submit" id="btn">Grab comments</button>
+            <p>Check console for more information.</p>
+            <p>Comments:</p>
+        </form>
+        <script>
+            $("#btn").on('click', function(e){
+				e.preventDefault();
+                if($("#token").val() !== "")
+                    var TOKEN = $("#token").val();
+                else
+                    var TOKEN = "";
+                var URL = $("#link").val(); //decodeURIComponent($(this).serialize()).slice(5);
+                var expPost = /\/[0-9]+/;
+                var postID = expPost.exec(URL)[0].slice(1);
+                var expPage = /\/\D\w+\//;
+                var pageName = expPage.exec(URL)[0].slice(1,-1);
+                var pageID = '';
+                console.log("URL: " + URL + "\nPost ID: " + postID + "\nPage Name: " + pageName);
+                $.getScript('https://connect.facebook.net/en_US/sdk.js', function(){
+                    //Inizializzazione delle API
+                    FB.init({
+                        appId: '569446653394144',
+                        version: 'v2.9'
+                    });
+
+                    //Richiesta dell'ID della pagina
+                    FB.api(
+                        pageName + '?access_token=' + TOKEN + '&fields=id',
+                        'GET',
+                        {},
+                        function(response){
+                            //Richiesta dei commenti
+                            FB.api(
+                                response.id + '_' + postID + '?access_token=' + TOKEN + '&fields=comments',
+                                'GET',
+                                {},
+                                function(response){
+                                    console.log(response);
+                                    for(i=0;i<response.comments.data.length;i++)
+                                        document.getElementById('container').innerHTML += ('<li>' + response.comments.data[i].message + '</li>');
+                                }
+                            );
+                        }
+                    );
+                });
+            });
+        </script>
+        <div id="container"></div>
+    </body>
+</html>
