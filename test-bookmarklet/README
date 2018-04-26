@@ -1,0 +1,3 @@
+# Bookmarklet version
+The problem with this version is that, trying to "inject" jQuery library by clicking the bookmark, it load a new page and return "true", losing the facebook page.
+If you copy n paste the whole jQuery library in the browser's console, it works and return "true", as with the bookmark. So, if there was a way to prevent that the library return a value when it was loaded...
