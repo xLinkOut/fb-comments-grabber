@@ -30,25 +30,26 @@
                 var pageID = '';
                 console.log("URL: " + URL + "\nPost ID: " + postID + "\nPage Name: " + pageName);
                 $.getScript('https://connect.facebook.net/en_US/sdk.js', function(){
-                    //Inizializzazione delle API
+                    //Init of API FB object
                     FB.init({
                         appId: '569446653394144',
                         version: 'v2.9'
                     });
 
-                    //Richiesta dell'ID della pagina
+                    //Request to get the ID of the page by its name
                     FB.api(
                         pageName + '?access_token=' + TOKEN + '&fields=id',
                         'GET',
                         {},
                         function(response){
-                            //Richiesta dei commenti
+                            //Comments's request
                             FB.api(
                                 response.id + '_' + postID + '?access_token=' + TOKEN + '&fields=comments',
                                 'GET',
                                 {},
                                 function(response){
                                     console.log(response);
+				    //Insert the comments one by one in a <ul> list
                                     for(i=0;i<response.comments.data.length;i++)
                                         document.getElementById('container').innerHTML += ('<li>' + response.comments.data[i].message + '</li>');
                                 }
